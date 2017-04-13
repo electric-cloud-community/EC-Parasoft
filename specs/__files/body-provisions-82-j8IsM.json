@@ -1,0 +1,1 @@
+{"eventId":82,"environmentId":5,"instanceId":6,"abortOnFailure":true,"status":"running","steps":[{"stepId":0,"name":"LoanProcessor-Negative","description":"Disable Virtual Asset","result":"running","percent":0},{"stepId":1,"name":"ParabankProxy","description":"Configure Message Proxy","result":"waiting","percent":0}]}

@@ -79,7 +79,12 @@ sub _request {
     my $ua = LWP::UserAgent->new;
     $self->_add_auth($req);
     $req->header('Content-Type' => 'application/json');
+    $ua->env_proxy;
+    if ($self->{proxy}) {
+        $ua->proxy(['http', 'https'] => $self->{proxy});
+    }
     my $response = $ua->request($req);
+    print Dumper $response;
     unless($response->is_success) {
         die 'Request failed: ' . $response->code . "\n" . $response->content;
     }

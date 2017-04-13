@@ -1,0 +1,20 @@
+{
+  "id" : "4341ab4d-890f-345d-b3e6-197b15ed5818",
+  "request" : {
+    "url" : "/em/api/v2/provisions/83",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-provisions-83-Gg2XN.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=E95C89915D3956C3934CD315FCC49B4F; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:59 GMT"
+    }
+  },
+  "uuid" : "4341ab4d-890f-345d-b3e6-197b15ed5818"
+}

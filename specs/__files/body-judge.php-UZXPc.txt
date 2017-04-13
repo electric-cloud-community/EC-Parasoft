@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>AZ Environment variables 1.04</title>
+<meta name="keywords" content="proxyjudge, proxy judge, azenv proxy judge, azenv.php" />
+</head>
+<body>
+<h1>PHP Proxy Judge</h1>
+<pre>
+HTTP_HOST = proxyjudge.us
+HTTP_CONNECTION = close
+HTTP_ACCEPT_CHARSET = iso-8859-1, utf-8, utf-16, *;q=0.1
+HTTP_ACCEPT = text/html, application/xml;q=0.9, application/xhtml+xml, image/png, image/webp, image/jpeg, image/gif, image/x-xbitmap, */*;q=0.1
+HTTP_CACHE_CONTROL = no-cache
+HTTP_USER_AGENT = Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6
+HTTP_REFERER = http://www.google.com/search?q=http%3A%2F%2Fproxyjudge%2Eus%2Fjudge%2Ephp
+HTTP_ACCEPT_LANGUAGE = en
+HTTP_ACCEPT_ENCODING = identity, *;q=0
+HTTP_PRAGMA = no-cache
+HTTP_PROXY_CONNECTION = Keep-Alive
+REMOTE_ADDR = 160.34.102.105
+REQUEST_SCHEME = http
+REMOTE_PORT = 34284
+REQUEST_METHOD = GET
+REQUEST_URI = /judge.php
+REQUEST_TIME_FLOAT = 1492091009.366
+REQUEST_TIME = 1492091009
+</pre>
+</body>
+</html>

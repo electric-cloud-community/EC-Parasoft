@@ -1,0 +1,139 @@
+apply plugin: "groovy"
+
+version = "1.0"
+description = "Specification Test Framework"
+
+sourceCompatibility = 1.8
+
+repositories {
+   // We are self contained!
+   flatDir {
+       dirs 'lib'
+   }
+   mavenCentral()
+}
+
+dependencies {
+
+  compile 'org.codehaus.groovy:groovy-all:2.4.5:indy'
+  compile fileTree(dir: 'lib', include: '*.jar')
+  compile "com.github.tomakehurst:wiremock:2.6.0"
+}
+
+buildDir = new File(projectDir.parentFile, 'build')
+def buildDirPath = buildDir.absolutePath
+
+sourceSets {
+	def testFile
+	// If the path is relative, construct
+	// the absolute path based on the
+	// user's current directory.
+	if (!java.nio.file.Paths.get(specFile).absolute) {
+	  testFile = new File(currentDir, specFile)
+	} else {
+	  testFile = new File(specFile)
+	}
+
+	def includeDir
+    def includeFiles
+	if (testFile.directory) {
+		includeDir = testFile.absolutePath
+		includeFiles = "**/*.groovy"
+	} else {
+		includeDir = testFile.parent
+		includeFiles = testFile.name
+	}
+
+	test {
+        output.resourcesDir = "$buildDirPath/classes/main"
+        output.classesDir = "$buildDirPath/classes/main"
+
+        groovy {
+            srcDir includeDir
+			include includeFiles
+        }
+		resources {
+            srcDir includeDir
+			include "**/*.dsl"
+        }
+		compileClasspath += sourceSets.main.runtimeClasspath
+
+	}
+
+}
+
+
+
+test {
+  if (!specFile) {
+	ant.fail('Please provide the specification file to test')
+  }
+  workingDir = projectDir.parentFile
+
+  testLogging {
+	showStandardStreams = true
+	exceptionFormat = 'full'
+  }
+
+  // testCompile "com.github.tomakehurst:wiremock:2.6.0"
+
+
+  //always run tests
+  outputs.upToDateWhen { false }
+
+
+	// Set the cli flag to indicate that the tests are
+	// being run using the ec-specs script
+	systemProperties['EC_SPECS_CLI'] = true
+
+	//poor man's clibuilder
+	def testReportDir
+	if(cmdLineArgs) {
+		def port
+		def args = cmdLineArgs.split()
+
+		for (def i = 0; i < args.length-1; i+=2) {
+
+		  if (args[i] == '--server') {
+		    systemProperties['COMMANDER_SERVER'] = args[i+1]
+
+		  } else if (args[i] == '--secure') {
+		    if (args[i+1] == '0' || args[i+1] == 'false') {
+			    systemProperties['COMMANDER_SECURE'] = 0
+			}
+
+		  } else if (args[i] == '--port') {
+			port = args[i+1]
+
+		  }	else if (args[i] == '--user') {
+			systemProperties['COMMANDER_USER'] = args[i+1]
+
+		  }	else if (args[i] == '--password') {
+			systemProperties['COMMANDER_PASSWORD'] = args[i+1]
+
+		  } else if (args[i] == '--testReportDir') {
+			  testReportDir = args[i+1]
+
+		  } else {
+			  def invalidArg = $args[i]
+			  ant.fail("Invalid argument '$invalidArg'")
+		  }
+		}
+		if (port) {
+		  def portProperty =
+			systemProperties['COMMANDER_SECURE'] == 0 ?
+				'COMMANDER_PORT' : 'COMMANDER_HTTPS_PORT'
+
+		  systemProperties[portProperty] = port
+		}
+
+	}
+
+	//
+	reports {
+		if (testReportDir) {
+			html.destination = testReportDir
+		}
+	}
+}
+

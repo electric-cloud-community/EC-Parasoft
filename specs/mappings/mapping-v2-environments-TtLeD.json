@@ -1,0 +1,20 @@
+{
+  "id" : "6d0604a3-41c4-3330-aee6-6ca44a4657a7",
+  "request" : {
+    "url" : "/em/api/v2/environments?name=env",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-environments-TtLeD.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=145E8A1E366F45EDDB63BED96DF1F654; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:58 GMT"
+    }
+  },
+  "uuid" : "6d0604a3-41c4-3330-aee6-6ca44a4657a7"
+}

@@ -1,0 +1,20 @@
+{
+  "id" : "ade5e665-ec8a-38c3-9415-257fa9d46dcd",
+  "request" : {
+    "url" : "/em/api/v2/provisions/82",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-provisions-82-j8IsM.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=10AF561B3E56D54A95579809D0259A09; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT"
+    }
+  },
+  "uuid" : "ade5e665-ec8a-38c3-9415-257fa9d46dcd"
+}

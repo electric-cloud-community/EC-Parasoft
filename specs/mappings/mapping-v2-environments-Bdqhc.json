@@ -1,0 +1,20 @@
+{
+  "id" : "10a1e3c3-442e-3f27-be9a-b596fb963fe6",
+  "request" : {
+    "url" : "/em/api/v2/environments?name=Golden",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-environments-Bdqhc.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=E62C52F4353D8FE9E18452EF7681FE63; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT"
+    }
+  },
+  "uuid" : "10a1e3c3-442e-3f27-be9a-b596fb963fe6"
+}

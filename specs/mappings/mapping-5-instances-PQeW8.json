@@ -1,0 +1,20 @@
+{
+  "id" : "f943ae35-1308-3dfd-b7c0-8ab649727b7f",
+  "request" : {
+    "url" : "/em/api/v2/environments/5/instances?name=Integrated",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-5-instances-PQeW8.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=3DF65AD1442C1943EFABF0767229743B; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT"
+    }
+  },
+  "uuid" : "f943ae35-1308-3dfd-b7c0-8ab649727b7f"
+}

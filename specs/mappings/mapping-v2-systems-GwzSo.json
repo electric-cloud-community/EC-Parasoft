@@ -1,0 +1,20 @@
+{
+  "id" : "6cf12db2-ed92-361b-9a87-8029862c9acc",
+  "request" : {
+    "url" : "/em/api/v2/systems?name=Parabank",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-systems-GwzSo.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=BBF3E9783DAB387567C0D5615FF40D19; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT"
+    }
+  },
+  "uuid" : "6cf12db2-ed92-361b-9a87-8029862c9acc"
+}

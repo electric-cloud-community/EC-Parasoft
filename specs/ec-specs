@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+##############################################################################
+#  Script for running Specs tool on *nix
+##############################################################################
+function usage
+{
+	echo "Usage: $0 <specs file or directory> [--server <hostname>] [--port <port>] [--secure true|false|1|0] [--user <userName>] [--password <password>] [--testReportDir <test report directory>]"
+}
+
+function error
+{
+	echo "$1"
+	usage
+	exit 1
+}
+
+if [ $# -eq 0 ]; then
+    usage
+    exit 1
+fi
+
+SPEC_FILE=$1
+if [ ! -e "$SPEC_FILE" ]; then
+   error "$SPEC_FILE does not exit!"
+fi
+
+# shift to skip the spec file name 
+# before reading in the rest of the args
+shift
+EC_TEST_ARGS="$@"
+SCRIPT_DIR="`dirname $0`"
+UTIL_DIR=$SCRIPT_DIR/utils
+GRADLE_USER_HOME=$SCRIPT_DIR/build/.gradle
+CURRENT_DIR="`pwd`"
+"$UTIL_DIR/gradlew" test -PspecFile="$SPEC_FILE" -PcurrentDir="$CURRENT_DIR" -PcmdLineArgs="$EC_TEST_ARGS" -b "$UTIL_DIR/build.gradle" --project-cache-dir "$GRADLE_USER_HOME/.gradle-cache" --no-daemon
+
+

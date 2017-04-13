@@ -1,0 +1,20 @@
+{
+  "id" : "594dd213-34e1-393d-abf6-519b6d9aa7c1",
+  "request" : {
+    "url" : "/em/api/v2/environments/5/instances?name=negative",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-5-instances-UTpKr.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=191E35DDF0004F0BF98169292E2CD0DE; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:59 GMT"
+    }
+  },
+  "uuid" : "594dd213-34e1-393d-abf6-519b6d9aa7c1"
+}
