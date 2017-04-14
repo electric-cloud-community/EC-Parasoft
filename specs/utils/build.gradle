@@ -54,7 +54,9 @@ sourceSets {
         }
 		resources {
             srcDir includeDir
-			include "**/*.dsl"
+            include "**/*.dsl"
+			include "**/wiremock/**"
+            // srcDir 'wiremock'
         }
 		compileClasspath += sourceSets.main.runtimeClasspath
 
