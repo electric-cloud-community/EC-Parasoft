@@ -37,6 +37,32 @@ sub get_environments {
     return $response->{environments} || [];
 }
 
+sub get_servers {
+    my ($self, %param) = @_;
+
+    my $request = HTTP::Request->new(GET => $self->_get_url('/v2/servers', %param));
+    my $response = $self->_request($request);
+    return $response->{servers} || [];
+}
+
+sub environment_copy_status {
+    my ($self, $id) = @_;
+
+    my $request = HTTP::Request->new(GET => $self->_get_url("/v2/environments/copy/$id"));
+    my $response = $self->_request($request);
+    return $response;
+}
+
+sub copy_environment {
+    my ($self, %param) = @_;
+
+    my $payload = encode_json(\%param);
+    my $request = HTTP::Request->new(POST => $self->_get_url('/v2/environments/copy'));
+    $request->content($payload);
+    my $response = $self->_request($request);
+    return $response;
+}
+
 sub get_environment_instances {
     my ($self, $env_id, %param) = @_;
 

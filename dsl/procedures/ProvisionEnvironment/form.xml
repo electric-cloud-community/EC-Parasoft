@@ -45,4 +45,27 @@
         <required>1</required>
         <documentation>Environment instance name, e.g. "All virtual".</documentation>
     </formElement>
+    <formElement>
+        <type>checkbox</type>
+        <label>Copy environment?:</label>
+        <property>copyEnvironment</property>
+        <checkedValue>1</checkedValue>
+        <uncheckedValue>0</uncheckedValue>
+        <required>0</required>
+        <documentation>If checked, the specified environment will be copied and the copy will be provisioned.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Environment copy name:</label>
+        <property>environmentCopyName</property>
+        <required>0</required>
+        <documentation>If provided, the name will be used for copied environment.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Destination server name:</label>
+        <property>copyEnvServerName</property>
+        <required>0</required>
+        <documentation>Destination server for environment copy. Required, if Copy environment flag is set.</documentation>
+    </formElement>
 </editor>

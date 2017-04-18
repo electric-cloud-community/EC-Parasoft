@@ -101,12 +101,85 @@ sub provision_environment {
     }
 }
 
+sub copy_environment {
+    my ($self, $params) = @_;
+
+    my $server_name = $params->{copyEnvServerName};
+
+    my $system = $self->get_system_by_name($params->{systemName});
+    unless($system) {
+        die "Cannot find system $params->{systemName}";
+    }
+
+    my $system_id = $system->{id};
+    $self->logger->trace("System id: $system_id");
+    my $environment = $self->get_environment_by_name($system_id, $params->{environmentName});
+    unless($environment) {
+        die "Cannot find an environment with name $params->{environmentName} within system $params->{systemName}";
+    }
+
+    my $environment_id = $environment->{id};
+
+    my $server = $self->get_server_by_name($server_name);
+    unless($server) {
+        die "Cannot find server $server_name";
+    }
+
+    my $server_id = $server->{id};
+    my $new_name = $params->{environmentCopyName} || $self->generate_unique_env_name($system_id, $params->{environmentName});
+
+    my $copy_result = $self->em_client->copy_environment(
+        originalEnvId => $environment_id,
+        server_id => $server_id,
+        copyDataRepo => \0,
+        newEnvironmentName => $new_name,
+    );
+
+    $self->logger->debug($copy_result);
+
+    my $status_id = $copy_result->{id};
+    my $copy_status = $self->em_client->environment_copy_status($status_id);
+    while($copy_status->{status} =~ /copying/i) {
+        sleep 1;
+        $copy_status = $self->em_client->environment_copy_status($status_id);
+    }
+
+    if ($copy_status->{status} !~ /complete/i ) {
+        die "Copy failed: $copy_status->{message}";
+    }
+
+    $self->logger->debug($copy_status);
+    return {status => $copy_status, name => $new_name};
+}
+
+
+sub get_server_by_name {
+    my ($self, $server_name) = @_;
+
+    my $servers = $self->em_client->get_servers(name => $server_name);
+    $self->logger->debug('Servers', $servers);
+    my ($server) = grep { $_->{name} =~ /^$server_name/i } @$servers;
+    return $server;
+}
+
+sub generate_unique_env_name {
+    my ($self, $system_id, $current_name) = @_;
+
+    my $new_name = "$current_name (Copy)";
+    my $index = 1;
+    while ($self->get_environment_by_name($system_id, $new_name)) {
+        $new_name = "$current_name (Copy $index)";
+        $index ++;
+    }
+    return $new_name;
+}
 
 sub get_system_by_name {
     my ($self, $name) = @_;
 
     my $systems = $self->em_client->get_systems(name => $name);
     $self->logger->debug('Systems', $systems);
+    $name = quotemeta $name;
     my ($system) = grep {$_->{name} =~ m/^$name$/i} @$systems;
     return $system;
 }
@@ -119,6 +192,7 @@ sub get_environment_by_name {
     );
     $self->logger->trace('Environment', $environments);
     return unless @$environments;
+    $name = quotemeta $name;
     my ($environment) = grep { $_->{systemId} == $system_id && $_->{name} =~ m/^$name$/i } @$environments;
     return $environment;
 }
@@ -132,7 +206,7 @@ sub get_environment_instance_by_name {
     );
     $self->logger->trace('Instances', $instances);
     return unless @$instances;
-
+    $name = quotemeta $name;
     my ($instance) = grep { $_->{name} =~ m/^$name$/i } @$instances;
     return $instance;
 }

@@ -96,12 +96,28 @@ sub step_provision_environment {
             systemName
             environmentName
             environmentInstanceName
+            copyEnvironment
+            environmentCopyName
+            copyEnvServerName
         /);
 
+        if ($params->{copyEnvironment}) {
+            my $copy_env_result = $self->parasoft_core->copy_environment($params);
+            my $env_name = $copy_env_result->{name};
+            $params->{environmentName} = $env_name;
+            $self->ec->setProperty('/myJob/parasoftEnvironmentName', $env_name);
+        }
+
         $self->parasoft_core->provision_environment($params);
+        $self->set_summary("Environment $params->{environmentName} has been provisioned with instance $params->{environmentInstanceName}");
     };
 
     $self->run_step($step);
+}
+
+
+sub step_delete_environment {
+    my ($self) = @_;
 }
 
 sub parasoft_core {
