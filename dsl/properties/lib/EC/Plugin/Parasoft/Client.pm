@@ -37,6 +37,26 @@ sub get_environments {
     return $response->{environments} || [];
 }
 
+sub delete_environment {
+    my ($self, $id) = @_;
+
+    my $request = HTTP::Request->new(DELETE => $self->_get_url("/v2/environments/$id"));
+
+    my $ua = LWP::UserAgent->new;
+    $self->_add_auth($request);
+    $request->header('Content-Type' => 'application/json');
+    $ua->env_proxy;
+    if ($self->{proxy}) {
+        $ua->proxy(['http', 'https'] => $self->{proxy});
+    }
+    my $response = $ua->request($request);
+    unless($response->is_success) {
+        die 'Request failed: ' . $response->code . "\n" . $response->content;
+    }
+    # This one returns xml
+    return;
+}
+
 sub get_servers {
     my ($self, %param) = @_;
 
@@ -123,7 +143,14 @@ sub _request {
     unless($response->is_success) {
         die 'Request failed: ' . $response->code . "\n" . $response->content;
     }
-    return decode_json($response->content);
+    my $retval;
+    eval {
+        $retval = decode_json($response->content);
+        1;
+    } or do {
+        die 'Cannot decode json: ' . $response->content;
+    };
+    return $retval;
 }
 
 sub _get_url {

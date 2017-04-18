@@ -118,6 +118,23 @@ sub step_provision_environment {
 
 sub step_delete_environment {
     my ($self) = @_;
+
+    my $step = sub {
+        my $params = $self->get_params_as_hashref(qw/
+            config
+            systemName
+            environmentName
+        /);
+
+        my $response = $self->parasoft_core->delete_environment($params);
+        if ($response->{deleted}) {
+            $self->set_summary("Environment $params->{environmentName} has been deleted");
+        }
+        elsif ($response->{does_not_exist}) {
+            $self->set_summary("Environment $params->{environmentName} does not exists");
+        }
+    };
+    $self->run_step($step);
 }
 
 sub parasoft_core {

@@ -1060,6 +1060,12 @@ sub new {
     return bless $self,$class;
 }
 
+sub warning {
+    my ($self, @messages) = @_;
+
+    $self->log(INFO, 'WARNING: ', @messages);
+}
+
 sub info {
     my ($self, @messages) = @_;
     $self->log(INFO, @messages);

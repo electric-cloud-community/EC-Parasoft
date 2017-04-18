@@ -22,6 +22,10 @@ def stepsWithAttachedCredentials = [
 			procedureName: 'Get Endpoints',
 			stepName: 'get endpoints'
 		],
+		[
+			procedureName: 'Delete Environment',
+			stepName: 'delete environment'
+		],
 	]
 
 project pluginName, {

@@ -101,6 +101,33 @@ sub provision_environment {
     }
 }
 
+
+sub delete_environment {
+    my ($self, $params) = @_;
+
+    my $system = $self->get_system_by_name($params->{systemName});
+    unless($system) {
+        die "Cannot find system $params->{systemName}";
+    }
+
+    my $system_id = $system->{id};
+    $self->logger->trace("System id: $system_id");
+    my $environment = $self->get_environment_by_name($system_id, $params->{environmentName});
+    unless($environment) {
+        my $message = "Cannot find an environment with name $params->{environmentName} within system $params->{systemName}";
+        if ($params->{strictMode}) {
+            die $message;
+        }
+        else {
+            $self->logger->warning($message);
+            return {does_not_exist => 1};
+        }
+    }
+    my $environment_id = $environment->{id};
+    $self->em_client->delete_environment($environment_id);
+    return {deleted => 1};
+}
+
 sub copy_environment {
     my ($self, $params) = @_;
 
@@ -192,9 +219,11 @@ sub get_environment_by_name {
     );
     $self->logger->trace('Environment', $environments);
     return unless @$environments;
-    $name = quotemeta $name;
-    my ($environment) = grep { $_->{systemId} == $system_id && $_->{name} =~ m/^$name$/i } @$environments;
-    return $environment;
+    @$environments = grep { $_->{systemId} == $system_id && $_->{name} =~ m/^\Q$name\E$/i } @$environments;
+    if (scalar @$environments > 1) {
+        die "More than one environment found for name $name";
+    }
+    return $environments->[0];
 }
 
 sub get_environment_instance_by_name {
@@ -207,6 +236,7 @@ sub get_environment_instance_by_name {
     $self->logger->trace('Instances', $instances);
     return unless @$instances;
     $name = quotemeta $name;
+    # TODO multiple instances for one name
     my ($instance) = grep { $_->{name} =~ m/^$name$/i } @$instances;
     return $instance;
 }
