@@ -71,6 +71,16 @@ sub get_provision_event {
 
     my $request = HTTP::Request->new(GET => $self->_get_url("/v2/provisions/$event_id"));
     my $response = $self->_request($request);
+    return $response;
+}
+
+sub get_endpoints {
+    my ($self, $env_id) = @_;
+
+    die 'No environmentId' unless $env_id;
+    my $request = HTTP::Request->new(GET => $self->_get_url("/v2/environments/$env_id/endpoints"));
+    my $response = $self->_request($request);
+    return $response;
 }
 
 sub _request {
@@ -84,7 +94,6 @@ sub _request {
         $ua->proxy(['http', 'https'] => $self->{proxy});
     }
     my $response = $ua->request($req);
-    print Dumper $response;
     unless($response->is_success) {
         die 'Request failed: ' . $response->code . "\n" . $response->content;
     }

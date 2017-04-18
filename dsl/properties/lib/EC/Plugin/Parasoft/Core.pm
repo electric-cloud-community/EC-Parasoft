@@ -137,5 +137,20 @@ sub get_environment_instance_by_name {
     return $instance;
 }
 
+sub get_endpoints {
+    my ($self, $params) = @_;
+
+    my $system = $self->get_system_by_name($params->{systemName});
+    die "No system found by name $params->{systemName}" unless $system;
+
+    my $system_id = $system->{id};
+    my $environment = $self->get_environment_by_name($system_id, $params->{environmentName});
+    die "No environment found by name $params->{environmentName}" unless $environment;
+    my $environment_id = $environment->{id};
+
+    my $endpoints = $self->em_client->get_endpoints($environment_id);
+    return $endpoints;
+}
+
 
 1;
