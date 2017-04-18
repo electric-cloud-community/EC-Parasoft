@@ -52,6 +52,18 @@ sub run_step {
     };
 }
 
+
+sub get_default_property_sheet {
+    my ($self, $name) = @_;
+
+    if ($self->in_pipeline) {
+        return "/myPipelineStageRuntime/$name";
+    }
+    else {
+        return "/myJob/$name";
+    }
+}
+
 sub step_get_endpoints {
     my ($self) = @_;
 
@@ -70,13 +82,17 @@ sub step_get_endpoints {
                 my ($url, $proxy, $type) = ($endpoint->{httpUrl}, $endpoint->{proxy}, $endpoint->{type});
                 if ($proxy) {
                     $retval->{$comp_name}->{proxy} = {url => $url, type => $type};
+                    $self->set_pipeline_summary("Component $comp_name, proxy endpoint:", $url);
                 }
                 else {
                     $retval->{$comp_name}->{real} = {url => $url, type => $type};
+                    $self->set_pipeline_summary("Component $comp_name, real endpoint:", $url);
                 }
             }
         }
-        my $flat_map = _flatten_map($retval, $params->{propertyName});
+
+        my $property_name = $params->{propertyName} || $self->get_default_property_sheet('parasoftEndpoints');
+        my $flat_map = _flatten_map($retval, $property_name);
         for my $key (sort keys %$flat_map) {
             $self->ec->setProperty($key, $flat_map->{$key});
             $self->logger->info("Saved property $flat_map->{$key} under $key");
@@ -109,7 +125,9 @@ sub step_provision_environment {
         }
 
         $self->parasoft_core->provision_environment($params);
-        $self->set_summary("Environment $params->{environmentName} has been provisioned with instance $params->{environmentInstanceName}");
+        my $summary = "Environment $params->{environmentName} has been provisioned with instance $params->{environmentInstanceName}";
+        $self->set_summary($summary);
+        $self->set_pipeline_summary("System $params->{systemName}, environment $params->{environmentName}", "Current instance: $params->{environmentInstanceName}");
     };
 
     $self->run_step($step);
@@ -137,6 +155,7 @@ sub step_delete_environment {
     $self->run_step($step);
 }
 
+
 sub parasoft_core {
     my ($self, $config_name) = @_;
 
@@ -155,8 +174,8 @@ sub parasoft_core {
             endpoint => $config->{endpoint},
             userName => $config->{userName},
             password => $config->{password},
-            proxy => $proxy,
-            logger => $self->logger,
+            proxy    => $proxy,
+            logger   => $self->logger,
         );
     }
     return $self->{core};

@@ -290,6 +290,29 @@ sub set_summary {
     $self->set_property(summary => $msg);
 }
 
+sub set_pipeline_summary {
+    my ($self, $name, $message) = @_;
+
+    eval {
+        $self->ec->setProperty("/myPipelineStageRuntime/ec_summary/$name", $message);
+        1;
+    };
+}
+
+sub in_pipeline {
+    my ($self) = @_;
+
+    my $retval;
+    eval {
+        $self->ec->getProperty('/myPipelineStageRuntime/id');
+        $retval = 1;
+        1;
+    } or do {
+        $retval = 0;
+    };
+    return $retval;
+}
+
 
 =item B<before_init_hook>
 

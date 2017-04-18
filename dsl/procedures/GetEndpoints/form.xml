@@ -42,8 +42,7 @@
         <type>entry</type>
         <label>Property name:</label>
         <property>propertyName</property>
-        <required>1</required>
-        <documentation>Property name for saving endpoints, e.g. /myPipelineRuntime/endpoints</documentation>
-        <value>/myJob/parasoftEndpoints</value>
+        <required>0</required>
+        <documentation>Property name for saving endpoints, e.g. /myPipelineRuntime/endpoints. If not defined, will be /myPipelineStageRuntime/parasoftEndpoints in pipeline and /myJob/parasoftEndpoints otherwise.</documentation>
     </formElement>
 </editor>
