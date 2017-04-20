@@ -3,6 +3,7 @@ package EC::Parasoft;
 use strict;
 use warnings;
 use EC::Plugin::Parasoft::Core;
+use EC::Plugin::Parasoft::TDM;
 
 use base qw(EC::Plugin::Core);
 
@@ -64,6 +65,16 @@ sub get_default_property_sheet {
     }
 }
 
+sub step_import_repository {
+    my ($self) = @_;
+
+    my $step = sub {
+        my $params = $self->get_params_as_hashref(qw/config repositoryExportFile repositoryName serverName/);
+        $self->tdm_core->import_repository($params);
+    };
+    $self->run_step($step);
+}
+
 sub step_get_endpoints {
     my ($self) = @_;
 
@@ -78,17 +89,20 @@ sub step_get_endpoints {
         for my $comp (@$components) {
             my $comp_name = $comp->{componentName};
             my $endpoints = $comp->{endpoints};
+
+            my @summary = ();
             for my $endpoint (@$endpoints) {
                 my ($url, $proxy, $type) = ($endpoint->{httpUrl}, $endpoint->{proxy}, $endpoint->{type});
                 if ($proxy) {
                     $retval->{$comp_name}->{proxy} = {url => $url, type => $type};
-                    $self->set_pipeline_summary("Component $comp_name, proxy endpoint:", $url);
+                    push @summary, qq{proxy endpoint: <a href="$url" target="_blank">$url</a>};
                 }
                 else {
                     $retval->{$comp_name}->{real} = {url => $url, type => $type};
-                    $self->set_pipeline_summary("Component $comp_name, real endpoint:", $url);
+                    push @summary, qq{real endpoint: <a href="$url" target="_blank">$url</a>};
                 }
             }
+            $self->set_pipeline_summary("Component $comp_name", '<html>' . join(', ', @summary) . '</html>');
         }
 
         my $property_name = $params->{propertyName} || $self->get_default_property_sheet('parasoftEndpoints');
@@ -127,7 +141,21 @@ sub step_provision_environment {
         $self->parasoft_core->provision_environment($params);
         my $summary = "Environment $params->{environmentName} has been provisioned with instance $params->{environmentInstanceName}";
         $self->set_summary($summary);
-        $self->set_pipeline_summary("System $params->{systemName}, environment $params->{environmentName}", "Current instance: $params->{environmentInstanceName}");
+
+        my $system = $self->parasoft_core->get_system_by_name($params->{systemName});
+        my $environment = $self->parasoft_core->get_environment_by_name($system->{id}, $params->{environmentName});
+
+
+        my $system_link = $self->parasoft_core->get_system_link($system);
+        my $environment_link = $self->parasoft_core->get_environment_link($environment);
+
+        my @lines = ();
+        push @lines, qq{System <a href="$system_link" target="_blank">$params->{systemName}</a>};
+        push @lines, qq{Environment <a href="$environment_link" target="_blank">$params->{environmentName}</a>};
+        push @lines, qq{Instance $params->{environmentInstanceName}};
+        my $pipeline_summary = '<html>' . join(', ', @lines) . '</html>';
+
+        $self->set_pipeline_summary("Provisioned system: ", $pipeline_summary);
     };
 
     $self->run_step($step);
@@ -179,6 +207,29 @@ sub parasoft_core {
         );
     }
     return $self->{core};
+}
+
+sub tdm_core {
+    my ($self, $config_name) = @_;
+
+    unless($self->{tdm_core}) {
+        unless($config_name) {
+            $config_name = $self->get_param('config');
+        }
+        my $plugin_project_name = '$[/myProject/name]';
+        my $config = $self->get_config_values($plugin_project_name, $config_name);
+        my $proxy;
+        eval {
+            $proxy = $self->ec->getProperty("/plugins/$self->{plugin_key}/project/httpProxy")->findvalue('//value')->string_value;
+            $self->logger->debug("HTTP Proxy is set: $proxy");
+        };
+        $self->{tdm_core} = EC::Plugin::Parasoft::TDM->new(
+            endpoint => $config->{endpoint},
+            userName => $config->{userName},
+            password => $config->{password},
+            logger => $self->logger,
+        );
+    }
 }
 
 sub _flatten_map {

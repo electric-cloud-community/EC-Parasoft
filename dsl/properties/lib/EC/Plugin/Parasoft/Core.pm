@@ -1,8 +1,8 @@
 package EC::Plugin::Parasoft::Core;
-
+# TODO rename
 use strict;
 use warnings;
-use EC::Plugin::Parasoft::Client;
+use EC::Plugin::Parasoft::EmClient;
 use EC::Plugin::Core;
 
 
@@ -32,7 +32,8 @@ sub em_client {
     my ($self) = @_;
 
     unless($self->{em_client}) {
-        $self->{em_client} = EC::Plugin::Parasoft::Client->new(
+        # TODO separate key
+        $self->{em_client} = EC::Plugin::Parasoft::EmClient->new(
             endpoint => $self->{endpoint},
             username => $self->{userName},
             password => $self->{password},
@@ -204,26 +205,35 @@ sub generate_unique_env_name {
 sub get_system_by_name {
     my ($self, $name) = @_;
 
-    my $systems = $self->em_client->get_systems(name => $name);
-    $self->logger->debug('Systems', $systems);
-    $name = quotemeta $name;
-    my ($system) = grep {$_->{name} =~ m/^$name$/i} @$systems;
-    return $system;
+    unless($self->{systems}->{$name}) {
+        my $systems = $self->em_client->get_systems(name => $name);
+        $self->logger->debug('Systems', $systems);
+        $name = quotemeta $name;
+        my ($system) = grep {$_->{name} =~ m/^$name$/i} @$systems;
+        $self->{systems}->{$name} = $system;
+    }
+    return $self->{systems}->{$name};
 }
 
 sub get_environment_by_name {
     my ($self, $system_id, $name) = @_;
 
-    my $environments = $self->em_client->get_environments(
-        name => $name
-    );
-    $self->logger->trace('Environment', $environments);
-    return unless @$environments;
-    @$environments = grep { $_->{systemId} == $system_id && $_->{name} =~ m/^\Q$name\E$/i } @$environments;
-    if (scalar @$environments > 1) {
-        die "More than one environment found for name $name";
+    die 'No system id' unless $system_id;
+    die 'No environment name' unless $name;
+
+    unless($self->{environments}->{$name}) {
+        my $environments = $self->em_client->get_environments(
+            name => $name
+        );
+        $self->logger->trace('Environment', $environments);
+        return unless @$environments;
+        @$environments = grep { $_->{systemId} == $system_id && $_->{name} =~ m/^\Q$name\E$/i } @$environments;
+        if (scalar @$environments > 1) {
+            die "More than one environment found for name $name";
+        }
+        $self->{environments}->{$name} = $environments->[0];
     }
-    return $environments->[0];
+    return $self->{environments}->{$name};
 }
 
 sub get_environment_instance_by_name {
@@ -256,5 +266,36 @@ sub get_endpoints {
     return $endpoints;
 }
 
+
+sub get_em_site_address {
+    my ($self) = @_;
+
+    unless($self->{site_address}) {
+        my $endpoint = URI->new($self->{endpoint});
+        $endpoint->path('');
+        $endpoint->query_form({});
+        $self->{site_address} = $endpoint;
+    }
+    return $self->{site_address};
+}
+
+
+sub get_system_link {
+    my ($self, $system) = @_;
+
+    my $site_address = $self->get_em_site_address;
+    $site_address->path('/em/ui/systems/' . $system->{id});
+    return $site_address->as_string;
+}
+
+
+sub get_environment_link {
+    my ($self, $environment) = @_;
+
+    my $site_address = $self->get_em_site_address;
+    $site_address->path("/em/environments/$environment->{id}");
+    $site_address->query_form(edit => 'true');
+    return $site_address->as_string;
+}
 
 1;
