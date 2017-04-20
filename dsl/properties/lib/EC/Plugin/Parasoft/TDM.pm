@@ -116,6 +116,25 @@ sub update_dataset {
     $self->logger->debug($response);
 }
 
+sub update_record {
+    my ($self, $params) = @_;
+
+    my $server = $self->get_server_by_name($params->{serverName});
+    unless($server) {
+        die "No servers found for name $params->{serverName}";
+    }
+
+    my $response = $self->tdm_client->update_record(
+        $server->{id},
+        $params->{repositoryName},
+        $params->{typeName},
+        $params->{recordId},
+        $params->{recordContent}
+    );
+
+    $self->logger->debug($response);
+}
+
 sub get_tdm_site_address {
     my ($self) = @_;
 

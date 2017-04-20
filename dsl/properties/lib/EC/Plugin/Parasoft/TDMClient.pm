@@ -8,6 +8,7 @@ use HTTP::Request::Common;
 use URI;
 use Data::Dumper;
 use JSON;
+use Encode qw(encode);
 use File::Basename;
 
 
@@ -106,6 +107,7 @@ sub import_repo {
 
     my $request = HTTP::Request->new(POST => $self->get_url("/v1/servers/$server_id/repositories/$repo_name/import"));
     my $payload = encode_json(\%param);
+    $payload = encode('utf8', $payload);
     $request->content($payload);
     $self->request($request);
 }
@@ -132,6 +134,20 @@ sub update_dataset {
         die "One of the required parameters is missing";
     }
     my $request = HTTP::Request->new(PUT => $self->get_url("/v1/servers/$server_id/repositories/$repo_name/dataSets/$dsname/$ds_record_id"));
+    $payload = encode('utf8', $payload);
+    $request->content($payload);
+    $self->request($request);
+}
+
+
+sub update_record {
+    my ($self, $server_id, $repo_name, $record_type, $id, $payload) = @_;
+
+    unless($server_id && $repo_name && $record_type && $id && $payload) {
+        die "One of the required parameters is missing";
+    }
+    my $request = HTTP::Request->new(PUT => $self->get_url("/v1/servers/$server_id/repositories/$repo_name/recordTypes/$record_type/$id"));
+    $payload = encode('utf8', $payload);
     $request->content($payload);
     $self->request($request);
 }

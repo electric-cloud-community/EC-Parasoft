@@ -93,6 +93,17 @@ sub step_update_dataset {
     $self->run_step($step);
 }
 
+sub step_update_record {
+    my ($self) = @_;
+
+    my $step = sub {
+        my $params = $self->get_params_as_hashref(qw/config serverName repositoryName typeName recordId recordContent/);
+        $self->tdm_core->update_record($params);
+        $self->set_summary("Record $params->{typeName} has been updated");
+    };
+    $self->run_step($step);
+}
+
 sub step_get_endpoints {
     my ($self) = @_;
 

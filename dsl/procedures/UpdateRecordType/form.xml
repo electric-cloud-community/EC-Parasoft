@@ -1,0 +1,62 @@
+<!--
+
+     Copyright 2016 Electric Cloud, Inc.
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+
+-->
+<editor>
+    <formElement>
+        <type>entry</type>
+        <label>Configuration:</label>
+        <property>config</property>
+        <required>1</required>
+        <documentation>Previously defined configuration for Parasoft Test Data Manager.</documentation>
+        <propertyReference>/plugins/@PLUGIN_NAME@/project/ec_plugin_cfgs</propertyReference>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>TDM server name:</label>
+        <property>serverName</property>
+        <required>1</required>
+        <documentation>Name of TDM server.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Repository name:</label>
+        <property>repositoryName</property>
+        <required>1</required>
+        <documentation>Name of TDM server.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Record type name:</label>
+        <property>typeName</property>
+        <required>1</required>
+        <documentation>Type of the record being updated.</documentation>
+    </formElement>
+    <formElement>
+        <type>entry</type>
+        <label>Record ID:</label>
+        <property>recordId</property>
+        <required>1</required>
+        <documentation>ID of the record being updated.</documentation>
+    </formElement>
+    <formElement>
+        <type>textarea</type>
+        <label>Record content:</label>
+        <property>recordContent</property>
+        <required>1</required>
+        <documentation>The content the data record should be updated to, in JSON format.</documentation>
+    </formElement>
+</editor>
