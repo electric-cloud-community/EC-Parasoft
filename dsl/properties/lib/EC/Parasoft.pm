@@ -104,6 +104,23 @@ sub step_update_record {
     $self->run_step($step);
 }
 
+sub step_execute_job {
+    my ($self) = @_;
+
+    my $params = $self->get_params_as_hashref(qw/config jobName/);
+    my $step = sub {
+       my $job_status = $self->em_core->execute_job($params);
+       if ($job_status->{status} eq 'SUCCESS') {
+            $self->set_summary("Job $params->{jobName} has been executed");
+       }
+       else {
+            die "Job $params->{jobName} has failed";
+       }
+    };
+    $self->run_step($step);
+}
+
+
 sub step_get_endpoints {
     my ($self) = @_;
 

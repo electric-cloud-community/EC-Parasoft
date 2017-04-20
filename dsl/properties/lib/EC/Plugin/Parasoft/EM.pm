@@ -102,6 +102,26 @@ sub provision_environment {
     }
 }
 
+sub execute_job {
+    my ($self, $params) = @_;
+
+    my $job = $self->get_job_by_name($params->{jobName});
+    $self->logger->debug($job);
+    unless($job) {
+        die "No job found for name $params->{jobName}";
+    }
+    my $job_id = $job->{id};
+    my $job_history = $self->em_client->create_job_history($job_id);
+    $self->logger->debug($job_history);
+
+    while($job_history->{status} =~ /waiting|running/i) {
+        sleep 1;
+        $job_history = $self->em_client->get_job_history($job_id, $job_history->{id});
+    }
+    $self->logger->debug($job_history);
+
+    return $job_history;
+}
 
 sub delete_environment {
     my ($self, $params) = @_;
@@ -249,6 +269,15 @@ sub get_environment_instance_by_name {
     # TODO multiple instances for one name
     my ($instance) = grep { $_->{name} =~ m/^$name$/i } @$instances;
     return $instance;
+}
+
+
+sub get_job_by_name {
+    my ($self, $job_name) = @_;
+
+    my $jobs = $self->em_client->get_jobs(name => $job_name);
+    my ($job) = grep { $_->{name} =~ m/^$job_name$/i } @$jobs;
+    return $job;
 }
 
 sub get_endpoints {

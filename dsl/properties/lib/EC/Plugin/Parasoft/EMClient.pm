@@ -120,6 +120,37 @@ sub get_provision_event {
     return $response;
 }
 
+
+sub get_jobs {
+    my ($self, %params) = @_;
+
+    my $request = HTTP::Request->new(GET => $self->_get_url("/v2/jobs", %params));
+    $self->_request($request)->{jobs};
+}
+
+
+sub create_job_history {
+    my ($self, $job_id, %params) = @_;
+    die 'No job id' unless $job_id;
+    my $request = HTTP::Request->new(POST => $self->_get_url("/v2/jobs/$job_id/histories"));
+    $request->content('{}');
+    $self->_request($request);
+}
+
+
+
+
+sub get_job_history {
+    my ($self, $job_id, $history_id) = @_;
+
+    unless($job_id && $history_id) {
+        die 'One of the required parameters missing';
+    }
+
+    my $request = HTTP::Request->new(GET => $self->_get_url("/v2/jobs/$job_id/histories/$history_id"));
+    $self->_request($request);
+}
+
 sub get_endpoints {
     my ($self, $env_id) = @_;
 
@@ -135,6 +166,7 @@ sub _request {
     my $ua = LWP::UserAgent->new;
     $self->_add_auth($req);
     $req->header('Content-Type' => 'application/json');
+    $req->header('Accept' => 'application/json');
     $ua->env_proxy;
     if ($self->{proxy}) {
         $ua->proxy(['http', 'https'] => $self->{proxy});

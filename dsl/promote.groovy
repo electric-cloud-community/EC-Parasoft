@@ -38,6 +38,10 @@ def stepsWithAttachedCredentials = [
 			procedureName: 'Update Record',
 			stepName: 'update record'
 		],
+		[
+			procedureName: 'Execute Job',
+			stepName: 'execute job'
+		],
 	]
 
 project pluginName, {
