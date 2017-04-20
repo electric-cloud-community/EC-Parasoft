@@ -30,6 +30,10 @@ def stepsWithAttachedCredentials = [
 			procedureName: 'Import Repository',
 			stepName: 'import repository'
 		],
+		[
+			procedureName: 'Update Data Set',
+			stepName: 'update data set'
+		],
 	]
 
 project pluginName, {

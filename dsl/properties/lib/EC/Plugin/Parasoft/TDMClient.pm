@@ -124,6 +124,18 @@ sub add_auth {
     $req->authorization_basic($self->{username}, $self->{password});
 }
 
+
+sub update_dataset {
+    my ($self, $server_id, $repo_name, $dsname, $ds_record_id, $payload) = @_;
+
+    unless($server_id && $repo_name && $dsname && $ds_record_id && $payload) {
+        die "One of the required parameters is missing";
+    }
+    my $request = HTTP::Request->new(PUT => $self->get_url("/v1/servers/$server_id/repositories/$repo_name/dataSets/$dsname/$ds_record_id"));
+    $request->content($payload);
+    $self->request($request);
+}
+
 # TODO duplicate
 sub request {
     my ($self, $req) = @_;

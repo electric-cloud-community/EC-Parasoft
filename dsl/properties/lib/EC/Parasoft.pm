@@ -81,6 +81,18 @@ sub step_import_repository {
     $self->run_step($step);
 }
 
+
+sub step_update_dataset {
+    my ($self) = @_;
+
+    my $step = sub {
+        my $params = $self->get_params_as_hashref(qw/config serverName repositoryName datasetName datasetRecordId datasetUpdateRequest/);
+        $self->tdm_core->update_dataset($params);
+        $self->set_summary("Dataset $params->{datasetName} has been updated");
+    };
+    $self->run_step($step);
+}
+
 sub step_get_endpoints {
     my ($self) = @_;
 
