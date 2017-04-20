@@ -2,7 +2,7 @@ package EC::Parasoft;
 
 use strict;
 use warnings;
-use EC::Plugin::Parasoft::Core;
+use EC::Plugin::Parasoft::EM;
 use EC::Plugin::Parasoft::TDM;
 
 use base qw(EC::Plugin::Core);
@@ -71,6 +71,12 @@ sub step_import_repository {
     my $step = sub {
         my $params = $self->get_params_as_hashref(qw/config repositoryExportFile repositoryName serverName/);
         $self->tdm_core->import_repository($params);
+
+        my $server_name = $params->{serverName};
+        my $server = $self->tdm_core->get_server_by_name($server_name);
+        my $link = $self->tdm_core->get_link_to_repository($server, $params->{repositoryName});
+        my $summary = qq{<html><a href="$link" target="_blank">$params->{repositoryName}</a></html>};
+        $self->set_pipeline_summary("Imported repository: ", $summary);
     };
     $self->run_step($step);
 }
@@ -80,7 +86,7 @@ sub step_get_endpoints {
 
     my $step = sub {
         my $params = $self->get_params_as_hashref(qw/config systemName environmentName propertyName/);
-        my $endpoints = $self->parasoft_core->get_endpoints($params);
+        my $endpoints = $self->em_core->get_endpoints($params);
         $self->logger->debug('Endpoints', $endpoints);
 
         my $components = $endpoints->{components};
@@ -132,22 +138,22 @@ sub step_provision_environment {
         /);
 
         if ($params->{copyEnvironment}) {
-            my $copy_env_result = $self->parasoft_core->copy_environment($params);
+            my $copy_env_result = $self->em_core->copy_environment($params);
             my $env_name = $copy_env_result->{name};
             $params->{environmentName} = $env_name;
             $self->ec->setProperty('/myJob/parasoftEnvironmentName', $env_name);
         }
 
-        $self->parasoft_core->provision_environment($params);
+        $self->em_core->provision_environment($params);
         my $summary = "Environment $params->{environmentName} has been provisioned with instance $params->{environmentInstanceName}";
         $self->set_summary($summary);
 
-        my $system = $self->parasoft_core->get_system_by_name($params->{systemName});
-        my $environment = $self->parasoft_core->get_environment_by_name($system->{id}, $params->{environmentName});
+        my $system = $self->em_core->get_system_by_name($params->{systemName});
+        my $environment = $self->em_core->get_environment_by_name($system->{id}, $params->{environmentName});
 
 
-        my $system_link = $self->parasoft_core->get_system_link($system);
-        my $environment_link = $self->parasoft_core->get_environment_link($environment);
+        my $system_link = $self->em_core->get_system_link($system);
+        my $environment_link = $self->em_core->get_environment_link($environment);
 
         my @lines = ();
         push @lines, qq{System <a href="$system_link" target="_blank">$params->{systemName}</a>};
@@ -172,7 +178,7 @@ sub step_delete_environment {
             environmentName
         /);
 
-        my $response = $self->parasoft_core->delete_environment($params);
+        my $response = $self->em_core->delete_environment($params);
         if ($response->{deleted}) {
             $self->set_summary("Environment $params->{environmentName} has been deleted");
         }
@@ -184,7 +190,7 @@ sub step_delete_environment {
 }
 
 
-sub parasoft_core {
+sub em_core {
     my ($self, $config_name) = @_;
 
     unless($self->{core}) {
@@ -198,7 +204,7 @@ sub parasoft_core {
             $proxy = $self->ec->getProperty("/plugins/$self->{plugin_key}/project/httpProxy")->findvalue('//value')->string_value;
             $self->logger->debug("HTTP Proxy is set: $proxy");
         };
-        $self->{core} = EC::Plugin::Parasoft::Core->new(
+        $self->{core} = EC::Plugin::Parasoft::EM->new(
             endpoint => $config->{endpoint},
             userName => $config->{userName},
             password => $config->{password},

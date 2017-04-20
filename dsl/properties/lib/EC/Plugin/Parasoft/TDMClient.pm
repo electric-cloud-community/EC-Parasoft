@@ -8,6 +8,7 @@ use HTTP::Request::Common;
 use URI;
 use Data::Dumper;
 use JSON;
+use File::Basename;
 
 
 sub new {
@@ -49,7 +50,7 @@ sub get_repository {
 sub upload_export {
     my ($self, $server_id, $filename) = @_;
 
-    my $export_name = 'export';
+    my $export_name = 'Export upload ' . basename($filename);
     my $data = qq{<?xml version="1.0" encoding="UTF-8"?>
         <exportUploadRequest xmlns="http://www.parasoft.com/api/tdm/v1/exports/messages">
             <name>$export_name</name>

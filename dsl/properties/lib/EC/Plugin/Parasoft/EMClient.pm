@@ -1,4 +1,4 @@
-package EC::Plugin::Parasoft::EmClient;
+package EC::Plugin::Parasoft::EMClient;
 
 use strict;
 use warnings;

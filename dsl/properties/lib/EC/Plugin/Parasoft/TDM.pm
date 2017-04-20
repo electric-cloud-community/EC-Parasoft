@@ -65,7 +65,7 @@ sub import_repository {
     my $import_response = $self->tdm_client->import_repo(
         $server_id, $repository_name,
         export => $export_id,
-        name => 'export name'
+        name => "Importing $repository_name"
     );
     my $task_id = $import_response->{tasks}->[0]->{id};
 
@@ -89,10 +89,33 @@ sub import_repository {
 sub get_server_by_name {
     my ($self, $name) = @_;
 
-    my $servers = $self->tdm_client->get_servers;
-    my ($server) = grep { $_->{alias} eq $name } @$servers;
-    return $server;
+    unless($self->{servers}->{$name}) {
+        my $servers = $self->tdm_client->get_servers;
+        my ($server) = grep { $_->{alias} eq $name } @$servers;
+        $self->{servers}->{$name} = $server;
+    }
+    return $self->{servers}->{$name};
 }
 
+sub get_tdm_site_address {
+    my ($self) = @_;
+
+    unless($self->{site_address}) {
+        my $endpoint = URI->new($self->{endpoint});
+        $endpoint->path('');
+        $endpoint->query_form({});
+        $self->{site_address} = $endpoint;
+    }
+    return $self->{site_address};
+}
+
+
+sub get_link_to_repository {
+    my ($self, $server, $repo_name) = @_;
+
+    my $link = $self->get_tdm_site_address;
+    $link->path("em/tdm/servers/$server->{id}/$repo_name");
+    return $link->as_string;
+}
 
 1;

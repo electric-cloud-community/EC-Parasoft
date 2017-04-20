@@ -1,8 +1,8 @@
-package EC::Plugin::Parasoft::Core;
-# TODO rename
+package EC::Plugin::Parasoft::EM;
+
 use strict;
 use warnings;
-use EC::Plugin::Parasoft::EmClient;
+use EC::Plugin::Parasoft::EMClient;
 use EC::Plugin::Core;
 
 
@@ -33,7 +33,7 @@ sub em_client {
 
     unless($self->{em_client}) {
         # TODO separate key
-        $self->{em_client} = EC::Plugin::Parasoft::EmClient->new(
+        $self->{em_client} = EC::Plugin::Parasoft::EMClient->new(
             endpoint => $self->{endpoint},
             username => $self->{userName},
             password => $self->{password},
