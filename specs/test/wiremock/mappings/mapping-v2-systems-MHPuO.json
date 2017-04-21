@@ -1,0 +1,22 @@
+{
+  "id" : "04267b1a-29f3-3707-904b-19abb20b53b5",
+  "request" : {
+    "url" : "/em/api/v2/systems?name=Parabank",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-systems-MHPuO.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=BBF3E9783DAB387567C0D5615FF40D19; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT",
+      "Vary" : "Accept-Encoding, User-Agent",
+      "Transfer-Encoding" : "chunked"
+    }
+  },
+  "uuid" : "04267b1a-29f3-3707-904b-19abb20b53b5"
+}

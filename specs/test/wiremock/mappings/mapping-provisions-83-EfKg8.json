@@ -1,0 +1,22 @@
+{
+  "id" : "88b32b40-26d1-3fcf-94d3-932dfe9141cf",
+  "request" : {
+    "url" : "/em/api/v2/provisions/83",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-provisions-83-EfKg8.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=E95C89915D3956C3934CD315FCC49B4F; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:59 GMT",
+      "Vary" : "Accept-Encoding, User-Agent",
+      "Transfer-Encoding" : "chunked"
+    }
+  },
+  "uuid" : "88b32b40-26d1-3fcf-94d3-932dfe9141cf"
+}

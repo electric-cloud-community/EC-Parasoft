@@ -36,16 +36,78 @@ attachCredential(
 
 
 
-project "Parasoft spec", {
-    procedure "Provision environment - good", {
-        step 'provision', {
-            subproject = "/plugins/$pluginName/project"
-            subprocedure = "Provision Environment"
+project 'Parasoft spec', {
+  resourceName = null
+  workspaceName = null
 
-            actualParameter 'config', configName
-            actualParameter 'systemName', 'Parabank'
-            actualParameter 'environmentName', 'Golden'
-            actualParameter 'environmentInstanceName', 'negative'
-        }
+  procedure 'Provision environment - good', {
+    jobNameTemplate = null
+    resourceName = null
+    timeLimitUnits = null
+    workspaceName = null
+
+    step 'provision', {
+      alwaysRun = '0'
+      broadcast = '0'
+      command = null
+      condition = null
+      errorHandling = 'failProcedure'
+      exclusiveMode = 'none'
+      logFileName = null
+      parallel = '0'
+      postProcessor = null
+      precondition = null
+      releaseMode = 'none'
+      resourceName = null
+      shell = null
+      subprocedure = 'Provision Environment'
+      subproject = '/plugins/EC-Parasoft/project'
+      timeLimitUnits = null
+      workingDirectory = null
+      workspaceName = null
+      actualParameter 'config', 'specConfig'
+      actualParameter 'environmentInstanceName', 'negative'
+      actualParameter 'environmentName', 'Golden'
+      actualParameter 'systemName', 'Parabank'
     }
+  }
+
+  procedure 'Provision environment - no such env', {
+    description = ''
+    jobNameTemplate = ''
+    resourceName = ''
+    timeLimit = ''
+    timeLimitUnits = 'minutes'
+    workspaceName = ''
+
+    step 'provision', {
+      description = ''
+      alwaysRun = '0'
+      broadcast = '0'
+      command = null
+      condition = ''
+      errorHandling = 'failProcedure'
+      exclusiveMode = 'none'
+      logFileName = null
+      parallel = '0'
+      postProcessor = null
+      precondition = ''
+      releaseMode = 'none'
+      resourceName = ''
+      shell = null
+      subprocedure = 'Provision Environment'
+      subproject = '/plugins/EC-Parasoft/project'
+      timeLimit = ''
+      timeLimitUnits = 'minutes'
+      workingDirectory = null
+      workspaceName = ''
+      actualParameter 'config', 'specConfig'
+      actualParameter 'copyEnvironment', '0'
+      actualParameter 'copyEnvServerName', ''
+      actualParameter 'environmentCopyName', ''
+      actualParameter 'environmentInstanceName', 'instance'
+      actualParameter 'environmentName', 'no such env'
+      actualParameter 'systemName', 'Parabank'
+    }
+  }
 }

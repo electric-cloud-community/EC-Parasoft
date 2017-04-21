@@ -42,7 +42,36 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
         wireMockServer.stop()
     }
 
-	def "run provision"() {
+    def "run provision"() {
+        given: 'provision procedure'
+            dslFile 'dsl/cleanup.dsl'
+            dslFile "dsl/setup.dsl"
+
+
+        when: 'the procedure is run'
+            def result = dsl """
+                runProcedure(
+                    projectName: 'Parasoft spec',
+                    procedureName: 'Provision environment - good'
+                )
+            """
+        then:
+            assert result?.jobId
+
+            waitUntil {
+                jobCompleted result.jobId
+            }
+            println "Job is completed"
+
+            assert jobStep(result.jobId, 'provision environment').outcome == 'success'
+
+        cleanup:
+
+            dslFile 'dsl/cleanup.dsl'
+
+    }
+
+	def "run provision - bad"() {
         given: 'provision procedure'
             dslFile 'dsl/cleanup.dsl'
             dslFile "dsl/setup.dsl"
@@ -52,7 +81,7 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
 			def result = dsl """
 				runProcedure(
 					projectName: 'Parasoft spec',
-					procedureName: 'Provision environment - good'
+					procedureName: 'Provision environment - no such env'
 				)
 			"""
         then:
@@ -63,7 +92,7 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
 			}
             println "Job is completed"
 
-            assert jobStep(result.jobId, 'provision environment').outcome == 'success'
+            assert jobStep(result.jobId, 'provision environment').outcome == 'error'
 
         cleanup:
 

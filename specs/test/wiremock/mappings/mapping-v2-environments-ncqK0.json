@@ -1,0 +1,20 @@
+{
+  "id" : "ebdb5a38-569d-3cfa-8be6-05a8da6d0468",
+  "request" : {
+    "url" : "/em/api/v2/environments?name=no+such+env",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-environments-ncqK0.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=969CD0733DB0C8AE75C7848BE978242F; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Fri, 21 Apr 2017 14:18:48 GMT"
+    }
+  },
+  "uuid" : "ebdb5a38-569d-3cfa-8be6-05a8da6d0468"
+}

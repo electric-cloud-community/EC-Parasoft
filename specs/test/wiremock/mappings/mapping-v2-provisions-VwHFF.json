@@ -1,0 +1,26 @@
+{
+  "id" : "27b16859-6c3e-365e-9549-17c0e93c946f",
+  "request" : {
+    "url" : "/em/api/v2/provisions",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"instanceId\":8,\"abortOnFailure\":\"true\",\"environmentId\":\"5\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-provisions-VwHFF.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=EDCFC653597E6910CA1C633966B87522; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:59 GMT",
+      "Transfer-Encoding" : "chunked"
+    }
+  },
+  "uuid" : "27b16859-6c3e-365e-9549-17c0e93c946f"
+}

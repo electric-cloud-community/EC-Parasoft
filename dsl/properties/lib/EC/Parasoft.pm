@@ -274,6 +274,7 @@ sub tdm_core {
             userName => $config->{userName},
             password => $config->{password},
             logger => $self->logger,
+            proxy => $proxy,
         );
     }
 }

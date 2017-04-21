@@ -1,0 +1,22 @@
+{
+  "id" : "ce5f8256-3faf-3bc4-8bff-5c48e6671703",
+  "request" : {
+    "url" : "/em/api/v2/environments?name=Golden",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-v2-environments-A3Gic.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=E62C52F4353D8FE9E18452EF7681FE63; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Thu, 13 Apr 2017 14:16:55 GMT",
+      "Vary" : "Accept-Encoding, User-Agent",
+      "Transfer-Encoding" : "chunked"
+    }
+  },
+  "uuid" : "ce5f8256-3faf-3bc4-8bff-5c48e6671703"
+}
