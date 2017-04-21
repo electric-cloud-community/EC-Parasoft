@@ -12,16 +12,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*
  * processing  to happen on the
  * ElectricFlow server.
  */
-class ProvisionProcedureTestSpec extends SpockTestSupport {
+class ParasoftTestSpec extends SpockTestSupport {
 
-
-	def pluginName = 'EC-Parasoft'
-    String pluginProject = getPluginProject('EC-Parasoft')
-	def configName = 'specsConfig'
-	def endpoint = 'http://localhost:8089/em/api'
-	def username = 'admin'
-	def password = 'admin'
-	def configPropertySheet = 'ec_plugin_cfgs'
     def wireMockServer
 
 
@@ -71,7 +63,36 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
 
     }
 
-	def "run provision - bad"() {
+    def "run provision - bad"() {
+        given: 'provision procedure'
+            dslFile 'dsl/cleanup.dsl'
+            dslFile "dsl/setup.dsl"
+
+
+        when: 'the procedure is run'
+            def result = dsl """
+                runProcedure(
+                    projectName: 'Parasoft spec',
+                    procedureName: 'Provision environment - no such env'
+                )
+            """
+        then:
+            assert result?.jobId
+
+            waitUntil {
+                jobCompleted result.jobId
+            }
+            println "Job is completed"
+
+            assert jobStep(result.jobId, 'provision environment').outcome == 'error'
+
+        cleanup:
+
+            dslFile 'dsl/cleanup.dsl'
+
+    }
+
+	def "get endpoints"() {
         given: 'provision procedure'
             dslFile 'dsl/cleanup.dsl'
             dslFile "dsl/setup.dsl"
@@ -81,7 +102,7 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
 			def result = dsl """
 				runProcedure(
 					projectName: 'Parasoft spec',
-					procedureName: 'Provision environment - no such env'
+					procedureName: 'Get Endpoints'
 				)
 			"""
         then:
@@ -92,7 +113,7 @@ class ProvisionProcedureTestSpec extends SpockTestSupport {
 			}
             println "Job is completed"
 
-            assert jobStep(result.jobId, 'provision environment').outcome == 'error'
+            assert jobStep(result.jobId, 'getEndpoints').outcome == 'success'
 
         cleanup:
 

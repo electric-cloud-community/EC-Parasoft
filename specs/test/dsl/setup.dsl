@@ -33,12 +33,53 @@ attachCredential(
     procedureName: "Provision Environment",
     stepName: 'provision environment'
 )
-
+attachCredential(
+    projectName: pluginProject,
+    credentialName: configName,
+    procedureName: "Get Endpoints",
+    stepName: 'get endpoints'
+)
 
 
 project 'Parasoft spec', {
   resourceName = null
   workspaceName = null
+
+  procedure 'Get Endpoints', {
+    description = ''
+    jobNameTemplate = ''
+    resourceName = ''
+    timeLimit = ''
+    timeLimitUnits = 'minutes'
+    workspaceName = ''
+
+    step 'getEndpoints', {
+      description = ''
+      alwaysRun = '0'
+      broadcast = '0'
+      command = null
+      condition = ''
+      errorHandling = 'failProcedure'
+      exclusiveMode = 'none'
+      logFileName = null
+      parallel = '0'
+      postProcessor = null
+      precondition = ''
+      releaseMode = 'none'
+      resourceName = ''
+      shell = null
+      subprocedure = 'Get Endpoints'
+      subproject = '/plugins/EC-Parasoft/project'
+      timeLimit = ''
+      timeLimitUnits = 'minutes'
+      workingDirectory = null
+      workspaceName = ''
+      actualParameter 'config', 'specConfig'
+      actualParameter 'environmentName', 'Golden'
+      actualParameter 'propertyName', ''
+      actualParameter 'systemName', 'Parabank'
+    }
+  }
 
   procedure 'Provision environment - good', {
     jobNameTemplate = null

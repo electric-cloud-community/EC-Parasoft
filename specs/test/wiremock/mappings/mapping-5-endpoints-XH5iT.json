@@ -1,0 +1,20 @@
+{
+  "id" : "8797d27a-bfe1-37b0-be2f-74e29b9071c6",
+  "request" : {
+    "url" : "/em/api/v2/environments/5/endpoints",
+    "method" : "GET"
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-5-endpoints-XH5iT.json",
+    "headers" : {
+      "Server" : "Apache-Coyote/1.1",
+      "X-XSS-Protection" : "1; mode=block",
+      "X-Content-Type-Options" : "nosniff",
+      "Set-Cookie" : "JSESSIONID=321C9049E6D0F7D380CBA36476F2D17E; Path=/em; HttpOnly",
+      "Content-Type" : "application/json;charset=UTF-8",
+      "Date" : "Fri, 21 Apr 2017 14:38:10 GMT"
+    }
+  },
+  "uuid" : "8797d27a-bfe1-37b0-be2f-74e29b9071c6"
+}
