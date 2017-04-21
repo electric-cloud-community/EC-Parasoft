@@ -58,9 +58,15 @@ sub import_repository {
         die;
     }
 
-    my $upload_response = $self->tdm_client->upload_export($server_id, $export_file);
+    my $upload_response;
+    eval {
+        $upload_response = $self->tdm_client->upload_export($server_id, $export_file);
+        1;
+    } or do {
+        die "Cannot upload export file :$@";
+    };
     my $export_id = $upload_response->{exports}->[0]->{id};
-
+    $self->logger->info("Export file $export_file has been uploaded successfully, export id is $export_id");
 
     my $import_response = $self->tdm_client->import_repo(
         $server_id, $repository_name,
@@ -80,9 +86,6 @@ sub import_repository {
             die "Task wait time exceeded";
         }
     }
-
-    print Dumper $task_status;
-
 }
 
 

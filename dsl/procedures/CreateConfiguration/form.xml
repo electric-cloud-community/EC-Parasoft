@@ -34,7 +34,7 @@
         <type>entry</type>
         <label>API endpoint:</label>
         <property>endpoint</property>
-        <required>0</required>
+        <required>1</required>
         <documentation>Parasoft API endpoint, e.g. http://my-server:80/em/api.</documentation>
     </formElement>
     <formElement>

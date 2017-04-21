@@ -1,13 +1,403 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta content="text/html; charset=us-ascii" http-equiv="content-type"/>
-        <title>MyPlugin</title>
+        <title>@PLUGIN_KEY@ Plugin</title>
+        <link rel="stylesheet" href="../../plugins/@PLUGIN_NAME@/pluginhelp.css" type="text/css" media="screen"/>
     </head>
     <body>
         <div class="help">
-            <h1>MyPlugin</h1>
-			<h3>Overview</h3>
-			<p></p>
+            <p>Plugin version @PLUGIN_VERSION@</p>
+            <hr style="margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;" noshade="noshade"/>
+            <h3>Overview</h3>
+            <p>@PLUGIN_KEY@ plugin integrates with Parasoft Environment Manager &amp; Parasoft Test Data Management APIs.</p>
+            <h1>Contents</h1>
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#CreateConfiguration">Setting Up the Plugin Configuration</a></li>
+                <li><a href="#procedures">Plugin Procedures</a></li>
+                <ul>
+                    <li><a href="#ProvisionEnvironment">Provision Environment</a></li>
+                    <li><a href="#GetEndpoints">Get Endpoints</a></li>
+                    <li><a href="#DeleteEnvironment">Delete Environment</a></li>
+                    <li><a href="#ExecuteJob">Execute Job</a></li>
+                    <li><a href="#ImportRepository">Import Repository</a></li>
+                    <li><a href="#UpdateDataset">Update Data Set</a></li>
+                    <li><a href="#UpdateRecord">Update Record</a></li>
+                </ul>
+                <li><a href="#releaseNotes">Release Notes</a></li>
+            </ul>
+
+
+            <div id="CreateConfiguration">
+                <a name="CreateConfiguration" id="CreateConfigurationLink"></a>
+                <h2>Plugin Configurations</h2>
+                <!-- If the plugin has separate configurations then include
+                     this section, otherwise omit this whole section. We don't
+                     need to have a configuration section that just says "There
+                     is no configuration for this plugin." -->
+                <p>
+                    Plugin configurations are sets of parameters that apply
+                    across some or all of the plugin procedures. They
+                    reduce repetition of common values, create
+                    predefined parameter sets for end users, and
+                    securely store credentials where needed. Each configuration
+                    is given a unique name that is entered in designated
+                    parameters on procedures that use them.<br /><br />
+                </p>
+                <!-- For all parameters, the parameter name should be *exactly*
+                     the same as it appears in the Parameter Panel, and the first
+                     sentence(s) of the description should be the same as the tooltip (if
+                     there is one). After that, the parameter description can go into
+                     greater detail about the parameter including valid value ranges and
+                     examples. -->
+                <h3>Creating Plugin Configurations</h3>
+                <p>To create plugin configurations in ElectricFlow,
+                do these steps:</p>
+                <ol>
+                    <li>Go to <b>Administration</b> &gt; <b>Plugins</b> to open the Plugin Manager.</li>
+                    <li>Find the @PLUGIN_KEY@ row.</li>
+                    <li>Click <b>Configure</b> to open the
+                    @PLUGIN_KEY@ Configurations page.</li>
+                    <li>Click <b>Create Configuration</b>.</li>
+                    <li>To enable ElectricFlow server to communicate with the Parasoft API,
+                    enter the following information:<br /></li>
+                    <table class="grid">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="required">Configuration Name</td>
+                                <td>The name of the configuration to create.</td>
+                            </tr>
+                            <tr>
+                                <td>Description</td>
+                                <td>Specifies the description for the configuration.</td>
+                            </tr>
+                            <tr>
+                                <td class="required">API endpoint</td>
+                                <td>Parasoft API endpoint, e.g. http://my-server:80/em/api for Environment Manager or http://my-server:80/tdm/api for Test Data Management. Please notice, that EM and TDM require different endpoints.</td>
+                            </tr>
+                            <tr>
+                                <td class="required">Credential</td>
+                                <td>Username and password to access Parasoft EM/TDM API.</td>
+                            </tr>
+                        </tbody>
+                        </table><img src="../../plugins/@PLUGIN_KEY@/images/Configuration.png" />
+                </ol>
+                <p>The @PLUGIN_KEY@ Configurations page now shows the new configuration.</p>
+                <h3>Editing Plugin Configurations</h3>
+                <p>To edit plugin configurations in ElectricFlow,
+                do these steps:</p>
+                <ol>
+                    <li>Go to <b>Administration</b> &gt; <b>Plugins</b> to open the Plugin Manager.</li>
+                    <li>Find the @PLUGIN_KEY@ row.</li>
+                    <li>Click <b>Configure</b> to open the
+                    EC-Dynatrace Configurations page.</li>
+                    <li>Find the configuration that you want to edit.</li>
+                    <li>Click <b>Edit</b>.</li>
+                    <li>Edit the parameters in the configuration.</li>
+                    <li>Click <b>OK</b> to save the modified configuration.</li>
+                </ol>
+            </div>
+
+            <h1 id="procedures">Plugin Procedures</h1>
+            <p>
+                IMPORTANT: For all parameter descriptions below, required parameters are shown in
+                <span class="required">bold italics</span>.
+            </p>
+
+            <div id="ProvisionEnvironment">
+                <a id="ProvisionEnvironment" name="ProvisionEnvironment"></a>
+                <h2>Provision Environment</h2>
+                <p>This procedure provisions environment with the previously defined environment instance.
+                </p>
+                <h3>Provision environment Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Environment Manager.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">System name</td>
+                            <td>System name, e.g. admin System.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Environment name</td>
+                            <td>Name of the environment to be provisioned.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Environment instance name</td>
+                            <td>Environment instance name, e.g. "All virtual".</td>
+                        </tr>
+                        <tr>
+                            <td>Copy environment</td>
+                            <td>If checked, the specified environment will be copied and the copy will be provisioned.</td>
+                        </tr>
+                        <tr>
+                            <td>Environment copy name</td>
+                            <td>If provided, the name will be used for copied environment. Otherwise the name will be generated automatically.</td>
+                        </tr>
+                        <tr>
+                            <td>Destination server name</td>
+                            <td>Destination server for environment copy. Required, if Copy environment flag is set.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/ProvisionEnvironment.png" />
+            </div>
+
+            <div id="GetEndpoints">
+                <a id="GetEndpoints" name="GetEndpoints"></a>
+                <h2>Get Endpoints</h2>
+                <p>This procedure retrieves endpoints from the specified environment, to use them for deployment.</p>
+                <h3>Get Endpoints Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Environment Manager.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">System name</td>
+                            <td>System name, e.g. admin System.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Environment name</td>
+                            <td>Name of the environment to get procedures.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Property name</td>
+                            <td>Property name for saving endpoints, e.g. /myPipelineRuntime/endpoints. If not defined, will be /myPipelineStageRuntime/parasoftEndpoints in pipeline and /myJob/parasoftEndpoints otherwise.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/GetEndpoints.png" />
+                <p>
+                After the procedure has finished, the next lines should appert in logs:
+                <br />
+                <img src="../../plugins/@PLUGIN_KEY@/images/GetEndpointsLog.png" />
+                </p>
+                <p>
+                If the procedure run as a part of pipeline, the summary will have the following data:
+                <br />
+                <img src="../../plugins/@PLUGIN_KEY@/images/GetEndpointsSummary.png" />
+                </p>
+                <p>
+                Endpoints are represented as a property sheet and have the next structure:
+                <pre>
+$propertySheetName:
+    $componentName:
+        proxy:
+            type: $proxyType # http
+            url: $proxyURL
+        real:
+            type: $realType # http
+            url: $realUrl
+                </pre>
+            </p>
+            </div>
+
+            <div id="DeleteEnvironment">
+                <a id="DeleteEnvironment" name="DeleteEnvironment"></a>
+                <h2>Delete Environment</h2>
+                <p>This procedure deletes previously copied environment. </p>
+                <h3>Delete Environment Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Environment Manager.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">System name</td>
+                            <td>System name, e.g. admin System.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Environment name</td>
+                            <td>Name of the environment to be provisioned.</td>
+                        </tr>
+                        <tr>
+                            <td>Strict mode</td>
+                            <td>If checked, the procedure will fail if no environment has been found. If not, procedure will succeed.</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/DeleteEnvironment.png" />
+            </div>
+            <div id="ExecuteJob">
+                <a id="ExecuteJob" name="ExecuteJob"></a>
+                <h2>Execute Job</h2>
+                <p>Executes SOA test job.</p>
+                <h3>Execute Job Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Environment Manager.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Job name</td>
+                            <td>Job name to execute</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/ExecuteJob.png" />
+            </div>
+            <div id="ImportRepository">
+                <a id="ImportRepository" name="ImportRepository"></a>
+                <h2>Import Repository</h2>
+                <p>Imports previously exported repository file.</p>
+                <h3>Import Repository Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Test Data Management.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">TDM server name</td>
+                            <td>Name of the TDM server to import repository.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Repository export file</td>
+                            <td>Path to repository .dr2 file.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Repository name</td>
+                            <td>Repository name for import. If the repository does not exist, it will be created.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/ImportRepository.png" />
+            </div>
+            <div id="UpdateDataset">
+                <a id="UpdateDataset" name="UpdateDataset"></a>
+                <h2>Update Data Set</h2>
+                <p>Updates repository data set.</p>
+                <h3>Update Data Set Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Test Data Management.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">TDM server name</td>
+                            <td>Name of the TDM server to import repository.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Repository name</td>
+                            <td>Repository name for import. If the repository does not exist, it will be created.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Data set name</td>
+                            <td>Data set name.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Data set recordId</td>
+                            <td>Internal ID of the data set record.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Data set update request</td>
+                            <td>Key data for this record, as a map whose keys are dynamically generated from the data set key field names, in JSON format.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/UpdateDataset.png" />
+            </div>
+            <div id="UpdateRecord">
+                <a id="UpdateRecord" name="UpdateRecord"></a>
+                <h2>Update Record</h2>
+                <p>Updates the specified record.</p>
+                <h3>Update Record Set Parameters</h3>
+                <table class="grid">
+                    <thead>
+                        <tr>
+                            <th>Parameter</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="required">Configuration</td>
+                            <td>Previously defined configuration for Parasoft Test Data Management.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">TDM server name</td>
+                            <td>Name of the TDM server to import repository.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Repository name</td>
+                            <td>Repository name for import. If the repository does not exist, it will be created.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Record type name</td>
+                            <td>Type of the record being updated.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Record Id</td>
+                            <td>ID of the record being updated.</td>
+                        </tr>
+                        <tr>
+                            <td class="required">Record content</td>
+                            <td>The content the data record should be updated to, in JSON format.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <img src="../../plugins/@PLUGIN_KEY@/images/UpdateRecord.png" />
+            </div>
+            <h1 id="releaseNotes">Release Notes</h1>
+            <h3>@PLUGIN_KEY@ 1.0.0</h3>
+            <ul>
+                <li>First release.</li>
+            </ul>
 		</div>
 	</body>
-</html>	
+</html>

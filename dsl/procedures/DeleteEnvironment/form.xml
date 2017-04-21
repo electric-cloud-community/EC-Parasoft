@@ -43,7 +43,7 @@
         <label>Strict mode?:</label>
         <property>strictMode</property>
         <checkedValue>1</checkedValue>
-        <unchechedValue>0</unchechedValue>
+        <uncheckedValue>0</uncheckedValue>
         <required>0</required>
         <value>0</value>
         <documentation>If checked, procedure will fail if no environment was found.</documentation>
