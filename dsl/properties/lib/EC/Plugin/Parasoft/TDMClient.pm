@@ -178,5 +178,14 @@ sub request {
     return $retval;
 }
 
+sub create_repository {
+    my ($self, $server_id, %params) = @_;
+
+    die 'No server id' unless $server_id;
+    my $request = HTTP::Request->new(POST => $self->get_url("/v1/servers/$server_id/repositories"));
+    my $payload = encode_json(\%params);
+    $request->content($payload);
+    $self->request($request);
+}
 
 1;

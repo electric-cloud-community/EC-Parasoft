@@ -52,11 +52,13 @@ sub import_repository {
         die "File $export_file does not exists";
     }
 
-    my $repository = $self->tdm_client->get_repository($server_id, $repository_name);
-    unless($repository) {
-        # TODO
-        die;
-    }
+    eval {
+        my $repository = $self->tdm_client->get_repository($server_id, $repository_name);
+        1;
+    } or do {
+        $self->tdm_client->create_repository($server_id, name => $repository_name);
+        $self->logger->info("Repository $repository_name has been created");
+    };
 
     my $upload_response;
     eval {
@@ -85,6 +87,11 @@ sub import_repository {
         if (time > $start_time + $timeout) {
             die "Task wait time exceeded";
         }
+    }
+
+    $self->logger->debug($task_status);
+    unless($task_status->{status} =~ m/finished/i) {
+        die "Task $task_status->{name} has failed to import repository"
     }
 }
 
