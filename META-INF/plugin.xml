@@ -1,7 +1,7 @@
 <plugin>
   <key>EC-Parasoft</key>
   <label>EC-Parasoft</label>
-  <version>1.0.0.0</version>
+  <version>1.0.1.0</version>
   <author>Electric Cloud</author>
   <authorUrl>http://www.electric-cloud.com/support</authorUrl>
   <category>Service virtualization</category>
