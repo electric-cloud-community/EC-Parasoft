@@ -11,6 +11,7 @@
         <div class="help">
             <p>Plugin version @PLUGIN_VERSION@</p>
             <hr style="margin-left: -10px; margin-top: 10px; height: 1px; width: 100%; color: #5981BD;" noshade="noshade"/>
+            <p>Revised on December 25, 2018</p>
             <h3>Overview</h3>
             <p>@PLUGIN_KEY@ plugin integrates with Parasoft Environment Manager &amp; Parasoft Test Data Management APIs.</p>
             <h1>Contents</h1>
@@ -394,6 +395,10 @@ $propertySheetName:
                 <img src="../../plugins/@PLUGIN_KEY@/images/UpdateRecord.png" />
             </div>
             <h1 id="releaseNotes">Release Notes</h1>
+            <h3>@PLUGIN_KEY@ 1.0.1</h3>
+            <ul>
+                <li>The plugin icon has been updated.</li>
+            </ul>
             <h3>@PLUGIN_KEY@ 1.0.0</h3>
             <ul>
                 <li>First release.</li>
